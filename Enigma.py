@@ -1,18 +1,18 @@
 
-reflectores = [ 'EJMZALYXVBWFCRQUONTSPIKHGD', #A
+reflectores = [ 'EJMZALYXVBWFCRQUONTSPIKHGD',
               'YRUHQSLDPXNGOKMIEBFZCWVJAT',
-              'FVPJIAOYEDRZXWGCTKUQSBNMHL'] #C
+              'FVPJIAOYEDRZXWGCTKUQSBNMHL']
 
-con_rotores = [ 'EKMFLGDQVZNTOWYHXUSPAIBRCJ', #1
+conRotores = [ 'EKMFLGDQVZNTOWYHXUSPAIBRCJ',
             'AJDKSIRUXBLHWTMCQGZNPYFVOE',
             'BDFHJLCPRTXVZNYEIWGAKMUSQO',
             'ESOVPZJAYQUIRHXLNFTGKDCMWB',
             'VZBRGITYUPSDNHLXAWMJQOFECK',
             'JPGVOUMFYQBENHZRDKASXLICTW',
             'NZJHGRCXMYSWBOUFAIVLPEKQDT',
-            'FKQHTLXOCBJSPDZRAMEWNIUYGV'] #8
+            'FKQHTLXOCBJSPDZRAMEWNIUYGV']
 
-vuelta_rotores = ['UWYGADFPVZBECKMTHXSLRINQOJ',
+vueltaRotores = ['UWYGADFPVZBECKMTHXSLRINQOJ',
                   'AJPCZWRLFBDKOTYUQGENHXMIVS',
                   'TAGBPCSDQEUFVNZHYIXJWLRKOM',
                   'HZWVARTNLGUPXQCEJMBSKDYOIF',
@@ -21,27 +21,27 @@ vuelta_rotores = ['UWYGADFPVZBECKMTHXSLRINQOJ',
                   'QMGYVPEDRCWTIANUXFKZOSLHJB',
                   'QJINSAYDVKBFRUHMCPLEWZTGXO']
 
-ALFABETO = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+alfabeto = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-def normalize_text(text):
-    result = ""
-    text = text.replace(" ", "").upper()
-    for c in text:
-        if c in ALFABETO:
-             result+=c
-    return result
-
-
-
-def char_to_pos(char):
-    return int(ord(char)-65)
+def normalizarTexto(texto):
+    resultado = ""
+    texto = texto.replace(" ", "").upper()
+    for letra in texto:
+        if letra in alfabeto:
+             resultado+=letra
+    return resultado
 
 
 
-def change(char,charset=ALFABETO,n=0):
-    pos = char_to_pos(char)+n
-    char = charset[pos % 26]
-    return char
+def caracterPosicion(caracter):
+    return int(ord(caracter)-65)
+
+
+
+def cambio(caracter,charset=alfabeto,n=0):
+    pos = caracterPosicion(caracter)+n
+    caracter = charset[pos % 26]
+    return caracter
 
 
 
@@ -49,101 +49,101 @@ class enigmaM3:
     reflector = ""
     rotores = ""
     plugboard = ""
-    pos_ini= "" #Posicion inicio se actualiza con cada caracter
-    pos_interna = ('A','A','A')
+    posInicio= ""
+    posInterna = ('A','A','A')
     muesca = (('Q',),('E',),('V',),('J',),('Z',),('Z','M'),('Z','M'),('Z','M'))
     opts = []
 
 
 
-    def __init__(self,rot,ref,pos_ini,pos_int,plugboard=None):
-        self.set_rotors(rot)
-        self.set_reflector(ref)
-        self.set_pos_ini(pos_ini)
-        self.set_pos_interna(pos_int)
-        self.set_plugboard(plugboard)
-        self.opts.append([rot,ref,pos_ini,pos_int,plugboard])
+    def __init__(self,rotor,ref,posInicio,posInterna,plugboard=None):
+        self.setRotores(rotor)
+        self.setReflector(ref)
+        self.setPosInicio(posInicio)
+        self.setPosInterna(posInterna)
+        self.setPlugboard(plugboard)
+        self.opts.append([rotor,ref,posInicio,posInterna,plugboard])
 
 
 
-    def set_reflector(self,char):
-        self.reflector = reflectores[char_to_pos(char)]
+    def setReflector(self,caracter):
+        self.reflector = reflectores[caracterPosicion(caracter)]
 
 
-    def set_rotors(self,rot):
+    def setRotores(self,rotor):
         rots = []
-        for q in range(len(rot)):
-            rots.append(rot[q]-1)
+        for elemento in range(len(rotor)):
+            rots.append(rotor[elemento]-1)
         self.rotores = tuple(rots)
 
 
-    def set_pos_ini(self,pos_ini):
-        self.pos_ini = list(pos_ini)
+    def setPosInicio(self,posInicio):
+        self.posInicio = list(posInicio)
 
 
-    def set_pos_interna(self,pos_int):
-        self.pos_interna = (pos_int)
+    def setPosInterna(self,posInterna):
+        self.posInterna = (posInterna)
 
 
-    def set_plugboard(self,plugboard):
+    def setPlugboard(self,plugboard):
         self.plugboard = plugboard
 
 
-    def reset(self):
+    def resetear(self):
         opts = self.opts[0]
         self.__init__(opts[0],opts[1],opts[2],opts[3],opts[4])
 
 
-    def apply_rotor(self,char,n,rotor):
-        char = change(char,rotor,n)
-        return change(char,n=-n)
+    def applyRotor(self,caracter,n,rotor):
+        caracter = cambio(caracter,rotor,n)
+        return cambio(caracter,n=-n)
 
 
-    def reflecta(self,char):
-        return change(char,self.reflector)
+    def reflecta(self,caracter):
+        return cambio(caracter,self.reflector)
 
 
-    def rotor_avanza(self):
-        if self.pos_ini[1] in self.muesca[self.rotores[1]]:
-            self.pos_ini[0] = change(self.pos_ini[0],n=1)
-            self.pos_ini[1] = change(self.pos_ini[1],n=1)
-        if self.pos_ini[2] in self.muesca[self.rotores[2]]:
-            self.pos_ini[1] = change(self.pos_ini[1],n=1)
-        self.pos_ini[2] = change(self.pos_ini[2],n=1)
+    def rotorAvanza(self):
+        if self.posInicio[1] in self.muesca[self.rotores[1]]:
+            self.posInicio[0] = cambio(self.posInicio[0],n=1)
+            self.posInicio[1] = cambio(self.posInicio[1],n=1)
+        if self.posInicio[2] in self.muesca[self.rotores[2]]:
+            self.posInicio[1] = cambio(self.posInicio[1],n=1)
+        self.posInicio[2] = cambio(self.posInicio[2],n=1)
 
 
-    def apply_plugboard(self,char):
+    def applyPlugboard(self,caracter):
         for i in self.plugboard:
-            if char == i[0]:
+            if caracter == i[0]:
                 return i[1]
-            if char == i[1]:
+            if caracter == i[1]:
                 return i[0]
-        return char
+        return caracter
 
 
-    def cipher_letter(self,char):
-        char = self.apply_plugboard(char)
-        self.rotor_avanza()
+    def cifrarLetra(self,caracter):
+        caracter = self.applyPlugboard(caracter)
+        self.rotorAvanza()
         for i in range(2,-1,-1):
-            n = ord(self.pos_ini[i]) - ord(self.pos_interna[i])
-            char = self.apply_rotor(char,n,con_rotores[self.rotores[i]])
-        char = self.reflecta(char)
+            n = ord(self.posInicio[i]) - ord(self.posInterna[i])
+            caracter = self.applyRotor(caracter,n,conRotores[self.rotores[i]])
+        caracter = self.reflecta(caracter)
         for i in range(3):
-            n = ord(self.pos_ini[i]) - ord(self.pos_interna[i])
-            char = self.apply_rotor(char,n,vuelta_rotores[self.rotores[i]])
-        char = self.apply_plugboard(char)
-        return char
+            n = ord(self.posInicio[i]) - ord(self.posInterna[i])
+            caracter = self.applyRotor(caracter,n,vueltaRotores[self.rotores[i]])
+        caracter = self.applyPlugboard(caracter)
+        return caracter
 
 
-    def cipher(self,text):
+    def cifrar(self,texto):
         output = ""
-        for c in text:
-            output += self.cipher_letter(c)
+        for letra in texto:
+            output += self.cifrarLetra(letra)
         return output
 
 
-    def decipher(self,text):
-        return self.cipher(text)
+    def descifrar(self,texto):
+        return self.cifrar(texto)
 
 
 
@@ -158,27 +158,27 @@ rotores = (4,1,3)
 #Reflectores
 reflector = 'B'
 #Posicion interna
-pos_interna = ('A','A','A')
+posInterna = ('A','A','A')
 #plugboard
 plugboard = [('A','M'),('F','I'),('N','V'),('P','S'),('T','U'),('W','Z')]
 
-enigma = enigmaM3(rotores,reflector,inicio,pos_interna,plugboard)
-texto_cifrado = enigma.cipher(plain)
+enigma = enigmaM3(rotores,reflector,inicio,posInterna,plugboard)
+textoCifrado = enigma.cifrar(plain)
 
 print("##############")
 print("    CIFRADO   ")
 print("##############")
 print(plain)
-print(texto_cifrado)
-print(normalize_text(expected))
+print(textoCifrado)
+print(normalizarTexto(expected))
 
 print("\n##############")
 print(" DESCIFRADO   ")
 print("##############")
-print(texto_cifrado)
-enigma.reset()
-texto_descifrado = enigma.decipher(texto_cifrado)
-print(texto_descifrado)
+print(textoCifrado)
+enigma.resetear()
+textoDescifrado = enigma.descifrar(textoCifrado)
+print(textoDescifrado)
 
 
 
