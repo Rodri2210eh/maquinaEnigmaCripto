@@ -147,38 +147,3 @@ class enigmaM3:
 
 
 
-#Configuración Enigma default
-plain = "ENUNLUGARDELAMANCHADECUYONOMBRENOQUIEROACORDARME"
-expected = "ZADEMFNSUHIQOWUIVUOOMTLIDLVGKAHTEEAGNWJLTDVGHNQR"
-
-#Posicion inicial rotores
-inicio = ('A','B','C')
-#Orden rotores
-rotores = (4,1,3)
-#Reflectores
-reflector = 'B'
-#Posicion interna
-posInterna = ('A','A','A')
-#plugboard
-plugboard = [('A','M'),('F','I'),('N','V'),('P','S'),('T','U'),('W','Z')]
-
-enigma = enigmaM3(rotores,reflector,inicio,posInterna,plugboard)
-textoCifrado = enigma.cifrar(plain)
-
-print("##############")
-print("    CIFRADO   ")
-print("##############")
-print(plain)
-print(textoCifrado)
-print(normalizarTexto(expected))
-
-print("\n##############")
-print(" DESCIFRADO   ")
-print("##############")
-print(textoCifrado)
-enigma.resetear()
-textoDescifrado = enigma.descifrar(textoCifrado)
-print(textoDescifrado)
-
-
-

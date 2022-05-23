@@ -1,6 +1,8 @@
 import tkinter
 from tkinter import *
 
+from maquinaEnigmaCripto.Enigma import enigmaM3
+
 
 class Enigma:
 
@@ -32,6 +34,18 @@ class Enigma:
     global n
     global m
     fun : bool
+    # Posicion inicial rotores
+    inicio = ('A', 'B', 'C')
+    # Orden rotores
+    rotores = (4, 1, 3)
+    # Reflectores
+    reflector = 'B'
+    # Posicion interna
+    posInterna = ('A', 'A', 'A')
+    # plugboard
+    plugboard = [('A', 'M'), ('F', 'I'), ('N', 'V'), ('P', 'S'), ('T', 'U'), ('W', 'Z')]
+
+    enigma : enigmaM3
 
     def __init__(self, root, fun):
         self.fun = fun
@@ -40,6 +54,8 @@ class Enigma:
         self.master = root
         self.label()
         self.botones()
+        self.enigma = enigmaM3(self.rotores,self.reflector,self.inicio,self.posInterna,self.plugboard)
+
 
 
 
@@ -587,10 +603,12 @@ class Enigma:
 
 
     def encriptar(self, x):
-        return x
+        temp = self.enigma.cifrar(x.upper())
+        return temp.lower()
 
     def desencriptar(self, x):
-        return x
+        temp = self.enigma.descifrar(x.upper())
+        return temp.lower()
 
 
 
