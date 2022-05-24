@@ -627,7 +627,7 @@ def menu():
         # Crea dos botones
     b1 = Button(myWindow, text='Encriptar', command= lambda: inicioGUI(True,myWindow), font=('Helvetica 10 bold'), width=21, height=2)
     b1.grid(row=0, column=0, sticky=W, padx=5, pady=5)
-    b2 = Button(myWindow, text='Desencriptar', command= lambda: inicioGUI(False), font=('Helvetica 10 bold'), width=21, height=2)
+    b2 = Button(myWindow, text='Desencriptar', command= lambda: inicioGUI(False, myWindow), font=('Helvetica 10 bold'), width=21, height=2)
     b2.grid(row=0, column=1, sticky=W, padx=5, pady=5)
     myWindow.mainloop()
 
